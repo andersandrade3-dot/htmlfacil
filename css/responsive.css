@@ -1,0 +1,50 @@
+/* ===================================================
+   RESPONSIVE.CSS - HTML Fácil
+   =================================================== */
+
+@media (max-width: 900px) {
+  .vsc-main-workarea {
+    flex-direction: column;
+  }
+
+  .editor-column {
+    min-height: 45vh;
+    border-right: none;
+    border-bottom: 1px solid var(--vsc-border);
+  }
+
+  .preview-column {
+    min-height: 45vh;
+  }
+
+  .vsc-sidebar {
+    position: absolute;
+    top: 38px;
+    bottom: 22px;
+    left: 48px;
+    z-index: 20;
+    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.5);
+  }
+
+  .titlebar-center .progress-text {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .titlebar-center {
+    display: none;
+  }
+
+  .status-item.hide-mobile {
+    display: none;
+  }
+
+  .game-options-container {
+    grid-template-columns: 1fr;
+  }
+
+  .teacher-stats-row {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="catGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f6d365" />
+      <stop offset="100%" stop-color="#fda085" />
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="30" fill="#2d3748"/>
+  <circle cx="100" cy="115" r="55" fill="url(#catGrad)"/>
+  <!-- orelhas -->
+  <polygon points="60,85 45,40 85,65" fill="#fda085"/>
+  <polygon points="140,85 155,40 115,65" fill="#fda085"/>
+  <polygon points="62,80 52,48 80,67" fill="#ffb199"/>
+  <polygon points="138,80 148,48 120,67" fill="#ffb199"/>
+  <!-- olhos -->
+  <ellipse cx="80" cy="110" rx="8" ry="11" fill="#2d3748"/>
+  <ellipse cx="120" cy="110" rx="8" ry="11" fill="#2d3748"/>
+  <circle cx="83" cy="107" r="3" fill="#ffffff"/>
+  <circle cx="123" cy="107" r="3" fill="#ffffff"/>
+  <!-- nariz e boca -->
+  <polygon points="96,122 104,122 100,127" fill="#e53e3e"/>
+  <path d="M 94,130 Q 100,135 106,130" stroke="#2d3748" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- bigodes -->
+  <line x1="50" y1="120" x2="72" y2="123" stroke="#cbd5e0" stroke-width="2"/>
+  <line x1="48" y1="128" x2="70" y2="128" stroke="#cbd5e0" stroke-width="2"/>
+  <line x1="150" y1="120" x2="128" y2="123" stroke="#cbd5e0" stroke-width="2"/>
+  <line x1="152" y1="128" x2="130" y2="128" stroke="#cbd5e0" stroke-width="2"/>
+</svg>

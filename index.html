@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Fácil - Simulador de VS Code para Aprendizagem</title>
+  <meta name="description" content="Aprenda HTML do zero de forma prática com simulador estilo VS Code, detecção de erros em tempo real e exercícios guiados.">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <!-- Estilos da Aplicação -->
+  <link rel="stylesheet" href="css/vscode-theme.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- ===================================================
+         TOP TITLEBAR / NAVBAR
+         =================================================== -->
+    <header class="vsc-titlebar">
+      <div class="titlebar-left">
+        <div class="app-brand">
+          <svg width="18" height="18" viewBox="0 0 64 64" fill="none">
+            <rect width="64" height="64" rx="12" fill="#e34f26"/>
+            <path d="M 12 12 L 52 12 L 48 48 L 32 54 L 16 48 Z" fill="#f06529"/>
+            <path d="M 32 15 L 32 50 L 45 46 L 48 15 Z" fill="#e34f26"/>
+          </svg>
+          <span>HTML Fácil</span>
+          <span class="badge-tag">VS Code Edition</span>
+        </div>
+
+        <div class="team-badge" id="btn-edit-student-team" title="Clique para editar os nomes da equipe">
+          <span>👥</span>
+          <span id="titlebar-team-display">Identificar Alunos</span>
+        </div>
+      </div>
+
+      <div class="titlebar-center">
+        <div class="progress-widget">
+          <span class="progress-level" id="top-progress-level">Fase 1</span>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="top-progress-bar"></div>
+          </div>
+          <span class="progress-text" id="top-progress-text">0 de 21</span>
+        </div>
+
+        <select id="exercise-quick-select" style="background: #252526; color: #d4d4d4; border: 1px solid #3c3c3c; border-radius: 4px; padding: 3px 8px; font-size: 11px; outline: none; cursor: pointer;">
+          <!-- Opções preenchidas dinamicamente pelo JS -->
+        </select>
+      </div>
+
+      <div class="titlebar-right">
+        <button class="btn-vsc btn-secondary" id="btn-reset-exercise" title="Restaurar código inicial">
+          🔄 Reiniciar
+        </button>
+        <button class="btn-vsc btn-run" id="btn-run-code" title="Executar e Verificar Código (Ctrl+Enter)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          <span>Executar</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ===================================================
+         MAIN WORKSPACE AREA
+         =================================================== -->
+    <div class="vsc-workspace">
+      <!-- Activity Bar (Esquerda) -->
+      <nav class="vsc-activity-bar">
+        <div class="activity-icons-top">
+          <button class="activity-btn active" data-view="explorer" title="Explorador de Arquivos">
+            <svg viewBox="0 0 24 24">
+              <path d="M19 20H5V4h7l2 2h5a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2zM5 2c-1.1 0-2 .9-2 2v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-6l-2-2H5z"/>
+            </svg>
+          </button>
+          <button class="activity-btn" data-view="head-body-game" title="Jogo: Quem mora no HEAD e quem mora no BODY?">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+            </svg>
+            <span class="activity-badge">Game</span>
+          </button>
+          <button class="activity-btn" data-view="fix-code" title="Conserte o Código (Modo Detetive)">
+            <svg viewBox="0 0 24 24">
+              <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+            </svg>
+          </button>
+          <button class="activity-btn" data-view="glossary" title="O que é isso? (Dicionário de Tags)">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="activity-icons-bottom">
+          <button class="activity-btn" data-view="teacher" title="Modo Professor (Painel Docente)">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/>
+            </svg>
+          </button>
+        </div>
+      </nav>
+
+      <!-- Sidebar (Explorador + Instruções do Exercício) -->
+      <aside class="vsc-sidebar" id="vsc-sidebar">
+        <div class="sidebar-tabs">
+          <button class="sidebar-tab-btn active" id="tab-btn-task">🎯 Atividade &amp; Dicas</button>
+          <button class="sidebar-tab-btn" id="tab-btn-files">📁 Arquivos do Projeto</button>
+        </div>
+
+        <div class="sidebar-content">
+          <!-- Painel do Exercício (Aba Principal) -->
+          <div class="exercise-panel" id="panel-exercise-view">
+            <div class="exercise-header-card">
+              <div class="exercise-meta">
+                <span class="badge-phase" id="exercise-badge-phase">Fase 1</span>
+                <span class="exercise-number" id="exercise-number-display">Ex 1 de 21</span>
+              </div>
+              <h2 class="exercise-title" id="exercise-title-text">Título do Exercício</h2>
+            </div>
+
+            <!-- O que fazer -->
+            <div>
+              <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #8c8c8c; margin-bottom: 5px;">
+                🎯 O que fazer:
+              </div>
+              <div class="instruction-box" id="exercise-task-text">
+                Carregando instruções...
+              </div>
+            </div>
+
+            <!-- Onde fazer -->
+            <div class="where-box">
+              <div class="where-title">
+                <span>📍 Onde fazer no código:</span>
+              </div>
+              <div class="where-diagram" id="exercise-where-diagram">
+                Carregando blueprint visual...
+              </div>
+            </div>
+
+            <!-- Sistema de Dicas Progressivas -->
+            <div class="hint-system">
+              <button class="btn-hint-trigger" id="btn-need-help">
+                <span>💡 Preciso de ajuda</span>
+                <span class="hint-counter" id="hint-counter-text">(0 de 4)</span>
+              </button>
+              <div class="hints-container" id="hints-display-container"></div>
+            </div>
+          </div>
+
+          <!-- Árvore de Arquivos (Aba Secundária) -->
+          <div class="file-tree-section" id="panel-files-view" style="display: none;">
+            <div class="section-title">
+              <span>▼ MEU-SITE</span>
+            </div>
+            <ul class="file-tree-list">
+              <li class="file-tree-item active" data-file="index.html">
+                <span class="file-icon html-icon">&lt;&gt;</span>
+                <span>index.html</span>
+              </li>
+              <li class="file-tree-item" data-file="pagina2.html">
+                <span class="file-icon html-icon">&lt;&gt;</span>
+                <span>pagina2.html</span>
+              </li>
+              <li class="file-tree-item locked" data-file="style.css" title="Bloqueado na fase inicial">
+                <span class="file-icon css-icon">#</span>
+                <span>style.css <small>(🔒)</small></span>
+              </li>
+              <li class="file-tree-item">
+                <span class="file-icon folder-icon">📁</span>
+                <span>imagens/</span>
+              </li>
+              <li class="folder-children">
+                <div class="file-tree-item" style="font-size: 11px; color: #888;">
+                  <span class="file-icon img-icon">🖼️</span>
+                  <span>gatinho.svg</span>
+                </div>
+                <div class="file-tree-item" style="font-size: 11px; color: #888;">
+                  <span class="file-icon img-icon">🖼️</span>
+                  <span>avatar.svg</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Área de Trabalho Principal (Editor + Preview) -->
+      <main class="vsc-main-workarea">
+        <!-- Coluna do Editor Central -->
+        <section class="editor-column">
+          <!-- Abas de Arquivos -->
+          <div class="editor-tabs-bar">
+            <div class="editor-tab active" data-file="index.html">
+              <span class="file-icon html-icon">&lt;&gt;</span>
+              <span>index.html</span>
+              <span class="tab-close-btn">&times;</span>
+            </div>
+            <div class="editor-tab" data-file="pagina2.html">
+              <span class="file-icon html-icon">&lt;&gt;</span>
+              <span>pagina2.html</span>
+              <span class="tab-close-btn">&times;</span>
+            </div>
+            <div class="editor-tab" data-file="style.css">
+              <span class="file-icon css-icon">#</span>
+              <span>style.css</span>
+              <span class="tab-close-btn">&times;</span>
+            </div>
+          </div>
+
+          <!-- Barra de Missão / Guia de Ação Superior -->
+          <div class="editor-mission-banner" id="editor-mission-banner">
+            <div class="mission-banner-left">
+              <span class="mission-tag-pill" id="mission-pill-number">Missão 1</span>
+              <span class="mission-summary-text" id="mission-summary-text">Crie a tag &lt;html&gt; e feche com &lt;/html&gt;</span>
+            </div>
+            <div class="mission-banner-right">
+              <button class="btn-mission-guide" id="btn-open-guide-modal" title="Ver explicação detalhada desta tarefa">
+                📋 Como Fazer?
+              </button>
+              <div class="mission-status-indicator" id="mission-status-indicator">
+                <span class="status-dot">🟡</span>
+                <span class="status-msg" id="mission-status-text">Aguardando código...</span>
+              </div>
+              <button class="btn-vsc btn-run btn-pulse-success" id="btn-advance-banner" style="display: none;" title="Avançar para a próxima tarefa!">
+                Avançar ➔
+              </button>
+            </div>
+          </div>
+
+          <!-- Superfície do Editor -->
+          <div class="editor-wrapper">
+            <div class="line-numbers" id="line-numbers"></div>
+            <div class="editor-surface">
+              <div class="current-line-highlight" id="current-line-highlight"></div>
+              <pre class="editor-overlay-highlight" id="editor-overlay-highlight"></pre>
+              <textarea class="code-input" id="code-input" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea>
+            </div>
+          </div>
+
+          <!-- Gaveta Inferior de Diagnósticos e Erros -->
+          <div class="diagnostic-drawer">
+            <div class="diagnostic-header">
+              <div class="diagnostic-tabs">
+                <div class="diag-tab active">
+                  <span>Diagnóstico Pedagógico</span>
+                  <span class="diag-badge-count is-ok" id="diag-badge-count">0</span>
+                </div>
+              </div>
+            </div>
+            <div class="diagnostic-content" id="diagnostic-list-container">
+              <!-- Mensagens pedagógicas renderizadas aqui -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Coluna do Navegador Simulado (Preview) -->
+        <section class="preview-column">
+          <div class="browser-window">
+            <!-- Barra Superior do Navegador -->
+            <div class="browser-titlebar">
+              <div class="browser-traffic-lights">
+                <div class="traffic-light light-red"></div>
+                <div class="traffic-light light-yellow"></div>
+                <div class="traffic-light light-green"></div>
+              </div>
+              <div class="browser-tabs">
+                <div class="browser-tab">
+                  <span class="browser-tab-favicon" id="browser-tab-favicon">🌐</span>
+                  <span class="browser-tab-title" id="browser-tab-title">Meu Primeiro Site</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Barra de Endereços e Ferramentas -->
+            <div class="browser-navbar">
+              <button class="nav-btn" title="Voltar">←</button>
+              <button class="nav-btn" title="Avançar">→</button>
+              <button class="nav-btn btn-reload-pulse" id="btn-browser-reload" title="Recarregar e testar seu site no navegador">🔄 Recarregar</button>
+              <div class="browser-address-bar">
+                <span class="address-lock">🔒</span>
+                <span class="address-url" id="browser-address-url">http://meu-site.local/index.html</span>
+              </div>
+            </div>
+
+            <!-- Aviso / Lembrete Visual para Atualizar o Navegador -->
+            <div class="browser-refresh-reminder" id="browser-refresh-reminder">
+              <span>👀 <strong>Confira o resultado:</strong> veja seu site ganhando vida aqui!</span>
+              <span style="font-size: 10px; color: #0043ce;">Clique em <strong>🔄 Recarregar</strong> para atualizar</span>
+            </div>
+
+            <!-- Iframe de Visualização Real -->
+            <div class="browser-viewport">
+              <iframe id="preview-iframe" title="Pré-visualização do Site" sandbox="allow-scripts allow-modals allow-same-origin"></iframe>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- ===================================================
+         BOTTOM STATUSBAR
+         =================================================== -->
+    <footer class="vsc-statusbar">
+      <div class="statusbar-left">
+        <div class="status-item">
+          <span>⚡ HTML Fácil</span>
+        </div>
+        <div class="status-item" id="status-cursor">
+          Linha 1, Coluna 1
+        </div>
+      </div>
+      <div class="statusbar-right">
+        <div class="status-item hide-mobile">
+          <span>UTF-8</span>
+        </div>
+        <div class="status-item">
+          <span>HTML</span>
+        </div>
+        <div class="status-item" title="Alunos Conectados">
+          <span>🟢 Ambiente Seguro</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ===================================================
+       MODAIS INTERATIVOS
+       =================================================== -->
+  <!-- 1. Modal: Jogo HEAD vs BODY -->
+  <div class="modal-overlay" id="modal-game">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>🧠 Quem mora no HEAD e quem mora no BODY?</span>
+        </div>
+        <button class="modal-close-btn" id="btn-close-game-modal">&times;</button>
+      </div>
+      <div class="modal-body" id="head-body-game-content"></div>
+    </div>
+  </div>
+
+  <!-- 2. Modal: Dicionário "O que é isso?" -->
+  <div class="modal-overlay" id="modal-glossary">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>📖 O que é isso? Guia Rápido de Tags HTML</span>
+        </div>
+        <button class="modal-close-btn" id="btn-close-glossary-modal">&times;</button>
+      </div>
+      <div class="modal-body" id="glossary-content"></div>
+    </div>
+  </div>
+
+  <!-- 3. Modal: Modo Professor -->
+  <div class="modal-overlay" id="modal-teacher">
+    <div class="modal-dialog" style="max-width: 840px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>👨‍🏫 Painel Docente - Acompanhamento Curricular</span>
+        </div>
+        <button class="modal-close-btn" id="btn-close-teacher-modal">&times;</button>
+      </div>
+      <div class="modal-body" id="teacher-content"></div>
+    </div>
+  </div>
+
+  <!-- 4. Modal: Celebração de Conclusão -->
+  <div class="modal-overlay" id="modal-success">
+    <div class="modal-dialog" style="max-width: 480px; position: relative;">
+      <button class="modal-close-btn" id="btn-close-success-modal" style="position: absolute; top: 10px; right: 10px;">&times;</button>
+      <div class="modal-body">
+        <div class="success-card">
+          <div class="success-icon-bounce">🎉</div>
+          <h2 class="success-title">Exercício Concluído!</h2>
+          <p class="success-desc" id="success-message-text">
+            Excelente trabalho! Você aplicou a estrutura correta.
+          </p>
+          <div class="success-actions">
+            <button class="btn-vsc btn-run" id="btn-next-exercise" style="padding: 8px 18px; font-size: 14px;">
+              Próximo Exercício ➔
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Modal: Guia Completo da Missão Atual (Telinha "O que Fazer") -->
+  <div class="modal-overlay" id="modal-mission-intro">
+    <div class="modal-dialog" style="max-width: 580px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>🎯 Instruções da Atividade</span>
+        </div>
+        <button class="modal-close-btn" id="btn-close-mission-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="mission-intro-card">
+          <div class="mission-intro-header">
+            <div class="mission-intro-phase" id="guide-modal-phase">Fase 1</div>
+            <div class="mission-intro-title" id="guide-modal-title">Título da Atividade</div>
+          </div>
+
+          <div class="mission-step-card">
+            <div class="mission-step-title">
+              <span>🎯 O QUE VOCÊ DEVE FAZER:</span>
+            </div>
+            <div class="mission-step-body" id="guide-modal-task">
+              Instruções...
+            </div>
+          </div>
+
+          <div class="mission-step-card">
+            <div class="mission-step-title">
+              <span>📍 ONDE COLOCAR NO CÓDIGO:</span>
+            </div>
+            <div class="where-diagram" id="guide-modal-where" style="margin-top: 6px;">
+              Diagrama...
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+            <button class="btn-hint-trigger" id="btn-guide-ask-hint" style="padding: 6px 12px;">
+              💡 Preciso de Ajuda
+            </button>
+            <button class="btn-vsc btn-run" id="btn-start-mission" style="padding: 8px 20px; font-size: 13px;">
+              Entendido, vou fazer! ➔
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Modal: Identificação dos Alunos (Duplas, Trios ou Quartetos) -->
+  <div class="modal-overlay" id="modal-student-id">
+    <div class="modal-dialog" style="max-width: 520px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>👥 Identificação dos Alunos / Equipe</span>
+        </div>
+        <button class="modal-close-btn" id="btn-close-team-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="font-size: 13px; color: #aaa; margin-bottom: 14px;">
+          Informe os estudantes que participarão desta atividade para constar no relatório e visto do professor:
+        </div>
+
+        <div style="font-size: 11px; font-weight: bold; color: #8c8c8c; margin-bottom: 6px;">MODALIDADE DA EQUIPE:</div>
+        <div class="team-type-selector">
+          <button type="button" class="team-type-btn" data-type="individual">Individual</button>
+          <button type="button" class="team-type-btn active" data-type="dupla">Dupla</button>
+          <button type="button" class="team-type-btn" data-type="trio">Trio</button>
+          <button type="button" class="team-type-btn" data-type="quarteto">Quarteto</button>
+        </div>
+
+        <div class="student-input-group">
+          <div class="student-input-row">
+            <label for="input-student-1">Nome do 1º Aluno(a): *</label>
+            <input type="text" id="input-student-1" placeholder="Ex: Anderson Andrade" required autocomplete="name">
+          </div>
+          <div class="student-input-row" id="row-student-2">
+            <label for="input-student-2">Nome do 2º Aluno(a): *</label>
+            <input type="text" id="input-student-2" placeholder="Ex: Maria Oliveira" autocomplete="name">
+          </div>
+          <div class="student-input-row" id="row-student-3" style="display: none;">
+            <label for="input-student-3">Nome do 3º Aluno(a):</label>
+            <input type="text" id="input-student-3" placeholder="Ex: Carlos Santos" autocomplete="name">
+          </div>
+          <div class="student-input-row" id="row-student-4" style="display: none;">
+            <label for="input-student-4">Nome do 4º Aluno(a):</label>
+            <input type="text" id="input-student-4" placeholder="Ex: Ana Souza" autocomplete="name">
+          </div>
+          <div class="student-input-row">
+            <label for="input-student-turma">Turma / Turno / Disciplina:</label>
+            <input type="text" id="input-student-turma" placeholder="Ex: Informática 2026.2 - Programação Web">
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px;">
+          <button class="btn-vsc btn-run" id="btn-save-team" style="padding: 9px 20px; font-size: 13px;">
+            Salvar e Iniciar Aula ➔
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Container Oculto Oficial para Impressão em Folha A4 -->
+  <div id="print-report-container"></div>
+
+  <!-- Scripts Modulares -->
+  <script src="js/exercises.js"></script>
+  <script src="js/validator.js"></script>
+  <script src="js/glossary.js"></script>
+  <script src="js/head-body-game.js"></script>
+  <script src="js/fix-code-mode.js"></script>
+  <script src="js/teacher-mode.js"></script>
+  <script src="js/editor.js"></script>
+  <script src="js/preview.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

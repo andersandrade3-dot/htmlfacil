@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="compGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4facfe" />
+      <stop offset="100%" stop-color="#00f2fe" />
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="30" fill="#1a202c"/>
+  <!-- Monitor -->
+  <rect x="35" y="40" width="130" height="90" rx="10" fill="#2d3748" stroke="#4a5568" stroke-width="4"/>
+  <!-- Tela -->
+  <rect x="45" y="50" width="110" height="70" rx="5" fill="#0f172a"/>
+  <!-- Código na tela -->
+  <path d="M 60 70 L 52 85 L 60 100" stroke="#00f2fe" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 140 70 L 148 85 L 140 100" stroke="#00f2fe" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="108" y1="65" x2="92" y2="105" stroke="#f6d365" stroke-width="4" stroke-linecap="round"/>
+  <!-- Suporte -->
+  <rect x="90" y="130" width="20" height="25" fill="#4a5568"/>
+  <rect x="65" y="155" width="70" height="10" rx="4" fill="#718096"/>
+</svg>
