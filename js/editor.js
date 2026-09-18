@@ -113,6 +113,13 @@ class SimpleCodeEditor {
     this.selectedSuggestionIndex = 0;
     this.intellisenseActive = false;
 
+    // Wrap with Tag (Alt + W) state
+    this.wrapPaletteEl = null;
+    this.wrapInputEl = null;
+    this.wrapPreviewEl = null;
+    this.floatingWrapBtn = null;
+    this.currentWrapSelection = null;
+
     this.init();
   }
 
@@ -137,10 +144,11 @@ class SimpleCodeEditor {
     // Manipulação avançada de teclas (Tab, Enter com auto-indentação, Ctrl+Espaço)
     this.textarea.addEventListener("keydown", (e) => this.handleKeyDown(e));
 
-    // Rastreamento de cursor e linha ativa
-    ["click", "keyup", "focus"].forEach(evt => {
+    // Rastreamento de cursor, seleção e linha ativa
+    ["click", "keyup", "focus", "select", "mouseup"].forEach(evt => {
       this.textarea.addEventListener(evt, () => {
         this.updateCursorPosition();
+        this.checkTextSelection();
       });
     });
 
@@ -148,8 +156,14 @@ class SimpleCodeEditor {
       if (this.intellisenseActive && !this.intellisenseEl.contains(e.target) && e.target !== this.textarea) {
         this.hideIntelliSense();
       }
+      if (this.wrapPaletteEl && this.wrapPaletteEl.style.display !== "none") {
+        if (!this.wrapPaletteEl.contains(e.target) && e.target.id !== "btn-trigger-wrap-tag" && e.target.id !== "floating-wrap-btn") {
+          this.closeWrapTagPalette();
+        }
+      }
     });
 
+    this.setupWrapTagUI();
     this.update();
   }
 
@@ -213,7 +227,14 @@ class SimpleCodeEditor {
       return;
     }
 
-    // 5. INDENTAÇÃO INTELIGENTE NO ENTER (ESTILO VS CODE)
+    // 5. Atalho Alt + W para Envolver Seleção com Tag (Emmet Wrap)
+    if (e.altKey && (e.key === "w" || e.key === "W" || e.code === "KeyW")) {
+      e.preventDefault();
+      this.openWrapTagPalette();
+      return;
+    }
+
+    // 6. INDENTAÇÃO INTELIGENTE NO ENTER (ESTILO VS CODE)
     if (e.key === "Enter") {
       e.preventDefault();
       this.handleSmartEnter();
@@ -512,5 +533,184 @@ class SimpleCodeEditor {
     });
 
     return safe;
+  }
+
+  /* -----------------------------------------------------------------
+   * RECURSO: ENVOLVER COM TAG (WRAP WITH ABBREVIATION / ALT + W)
+   * ----------------------------------------------------------------- */
+  setupWrapTagUI() {
+    this.wrapPaletteEl = document.getElementById("wrap-tag-palette");
+    this.wrapInputEl = document.getElementById("wrap-tag-input");
+    this.wrapPreviewEl = document.getElementById("wrap-palette-selection-text");
+    this.floatingWrapBtn = document.getElementById("floating-wrap-btn");
+
+    // Botão de fechar paleta
+    const btnClose = document.getElementById("btn-close-wrap-palette");
+    if (btnClose) {
+      btnClose.addEventListener("click", () => this.closeWrapTagPalette());
+    }
+
+    // Botão confirmar envolvimento
+    const btnConfirm = document.getElementById("btn-confirm-wrap");
+    if (btnConfirm) {
+      btnConfirm.addEventListener("click", () => {
+        if (this.wrapInputEl) this.applyWrapTag(this.wrapInputEl.value);
+      });
+    }
+
+    // Input da paleta: Enter para confirmar, Esc para fechar
+    if (this.wrapInputEl) {
+      this.wrapInputEl.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          this.applyWrapTag(this.wrapInputEl.value);
+        } else if (e.key === "Escape") {
+          e.preventDefault();
+          this.closeWrapTagPalette();
+        }
+      });
+    }
+
+    // Sugestões de chips rápidos (strong, em, mark, etc.)
+    document.querySelectorAll(".palette-chip[data-tag]").forEach(chip => {
+      chip.addEventListener("click", () => {
+        const tag = chip.getAttribute("data-tag");
+        this.applyWrapTag(tag);
+      });
+    });
+
+    // Botão na barra de abas
+    const btnTabAction = document.getElementById("btn-trigger-wrap-tag");
+    if (btnTabAction) {
+      btnTabAction.addEventListener("click", () => {
+        this.openWrapTagPalette();
+      });
+    }
+
+    // Botão flutuante
+    if (this.floatingWrapBtn) {
+      this.floatingWrapBtn.addEventListener("click", () => {
+        this.openWrapTagPalette();
+      });
+    }
+  }
+
+  checkTextSelection() {
+    if (!this.floatingWrapBtn) return;
+    const start = this.textarea.selectionStart;
+    const end = this.textarea.selectionEnd;
+    if (start !== end && Math.abs(end - start) > 0) {
+      this.floatingWrapBtn.style.display = "inline-flex";
+    } else {
+      this.floatingWrapBtn.style.display = "none";
+    }
+  }
+
+  openWrapTagPalette() {
+    let start = this.textarea.selectionStart;
+    let end = this.textarea.selectionEnd;
+    const val = this.textarea.value;
+
+    // Se nenhuma seleção explícita foi feita, seleciona a palavra sob o cursor automaticamente!
+    if (start === end) {
+      let wStart = start;
+      let wEnd = end;
+      // Procura o início da palavra
+      while (wStart > 0 && /[a-zA-Z0-9_À-ÿ-]/i.test(val[wStart - 1])) {
+        wStart--;
+      }
+      // Procura o fim da palavra
+      while (wEnd < val.length && /[a-zA-Z0-9_À-ÿ-]/i.test(val[wEnd])) {
+        wEnd++;
+      }
+      if (wStart < wEnd) {
+        this.textarea.selectionStart = wStart;
+        this.textarea.selectionEnd = wEnd;
+        start = wStart;
+        end = wEnd;
+      }
+    }
+
+    const selectedText = val.substring(start, end);
+    this.currentWrapSelection = {
+      start: start,
+      end: end,
+      text: selectedText
+    };
+
+    if (this.wrapPreviewEl) {
+      this.wrapPreviewEl.textContent = selectedText.trim() ? `"${selectedText.trim()}"` : "(digite a tag para envolver a seleção)";
+    }
+
+    if (this.wrapPaletteEl) {
+      this.wrapPaletteEl.style.display = "block";
+    }
+
+    if (this.wrapInputEl) {
+      this.wrapInputEl.value = "";
+      setTimeout(() => this.wrapInputEl.focus(), 50);
+    }
+  }
+
+  closeWrapTagPalette() {
+    if (this.wrapPaletteEl) {
+      this.wrapPaletteEl.style.display = "none";
+    }
+    this.textarea.focus();
+  }
+
+  applyWrapTag(rawTag) {
+    let tag = (rawTag || "").trim();
+    if (!tag) tag = "strong"; // Padrão inteligente
+
+    // Remove eventuais sinais de < e > digitados pelo aluno
+    tag = tag.replace(/^<\/|^<|>$/g, "").trim();
+
+    const sel = this.currentWrapSelection || {
+      start: this.textarea.selectionStart,
+      end: this.textarea.selectionEnd,
+      text: this.textarea.value.substring(this.textarea.selectionStart, this.textarea.selectionEnd)
+    };
+
+    const val = this.textarea.value;
+    const textToWrap = sel.text || "";
+
+    let openTag = `<${tag}>`;
+    let closeTag = `</${tag}>`;
+
+    // Caso especial para link <a>
+    if (tag.toLowerCase() === "a") {
+      openTag = `<a href="">`;
+      closeTag = `</a>`;
+    } else if (tag.includes(" ")) {
+      // Ex: se o aluno digitou 'a href="site.com"' ou similar
+      const tagNameOnly = tag.split(" ")[0];
+      openTag = `<${tag}>`;
+      closeTag = `</${tagNameOnly}>`;
+    }
+
+    const wrapped = `${openTag}${textToWrap}${closeTag}`;
+    this.textarea.value = val.substring(0, sel.start) + wrapped + val.substring(sel.end);
+
+    // Reposiciona o cursor
+    let newCursorPos;
+    if (tag.toLowerCase() === "a" && !tag.includes("href=")) {
+      // Posiciona cursor dentro de href="|"
+      newCursorPos = sel.start + 9;
+    } else {
+      // Posiciona cursor após o fechamento da tag
+      newCursorPos = sel.start + wrapped.length;
+    }
+
+    this.textarea.selectionStart = this.textarea.selectionEnd = newCursorPos;
+
+    this.closeWrapTagPalette();
+    this.checkTextSelection();
+    this.update();
+    this.onChange(this.getValue());
+
+    if (window.App && window.App.sound) {
+      window.App.sound.playHint();
+    }
   }
 }

@@ -192,20 +192,28 @@
         <section class="editor-column">
           <!-- Abas de Arquivos -->
           <div class="editor-tabs-bar">
-            <div class="editor-tab active" data-file="index.html">
-              <span class="file-icon html-icon">&lt;&gt;</span>
-              <span>index.html</span>
-              <span class="tab-close-btn">&times;</span>
+            <div class="editor-tabs-list">
+              <div class="editor-tab active" data-file="index.html">
+                <span class="file-icon html-icon">&lt;&gt;</span>
+                <span>index.html</span>
+                <span class="tab-close-btn">&times;</span>
+              </div>
+              <div class="editor-tab" data-file="pagina2.html">
+                <span class="file-icon html-icon">&lt;&gt;</span>
+                <span>pagina2.html</span>
+                <span class="tab-close-btn">&times;</span>
+              </div>
+              <div class="editor-tab" data-file="style.css">
+                <span class="file-icon css-icon">#</span>
+                <span>style.css</span>
+                <span class="tab-close-btn">&times;</span>
+              </div>
             </div>
-            <div class="editor-tab" data-file="pagina2.html">
-              <span class="file-icon html-icon">&lt;&gt;</span>
-              <span>pagina2.html</span>
-              <span class="tab-close-btn">&times;</span>
-            </div>
-            <div class="editor-tab" data-file="style.css">
-              <span class="file-icon css-icon">#</span>
-              <span>style.css</span>
-              <span class="tab-close-btn">&times;</span>
+            <div class="editor-tabs-actions">
+              <button type="button" class="btn-editor-tab-action" id="btn-trigger-wrap-tag" title="Envolver texto selecionado com uma tag HTML (Atalho: Alt + W)">
+                <span>⚡ Envolver com Tag</span>
+                <kbd>Alt+W</kbd>
+              </button>
             </div>
           </div>
 
@@ -230,7 +238,41 @@
           </div>
 
           <!-- Superfície do Editor -->
-          <div class="editor-wrapper">
+          <div class="editor-wrapper" style="position: relative;">
+            <!-- Botão Flutuante de Seleção Ativa -->
+            <button type="button" class="floating-wrap-btn" id="floating-wrap-btn" style="display: none;" title="Clique ou pressione Alt + W para envolver o texto selecionado">
+              <span>⚡ Envolver Seleção</span>
+              <kbd>Alt+W</kbd>
+            </button>
+
+            <!-- Paleta de Comando para Envolver Tag (Alt + W) -->
+            <div class="wrap-tag-palette" id="wrap-tag-palette" style="display: none;">
+              <div class="palette-header">
+                <span class="palette-title">⚡ Envolver Seleção com Tag (Atalho: Alt + W)</span>
+                <button type="button" class="palette-close-btn" id="btn-close-wrap-palette" title="Fechar (Esc)">&times;</button>
+              </div>
+              <div class="palette-body">
+                <div class="palette-selected-preview">
+                  Texto a ser envolvido: <strong id="wrap-palette-selection-text">"texto"</strong>
+                </div>
+                <div class="palette-input-wrapper">
+                  <input type="text" id="wrap-tag-input" placeholder="Digite a tag (ex: strong, em, mark, a, p)..." autocomplete="off" />
+                  <button type="button" class="btn-vsc btn-run" id="btn-confirm-wrap">Envolver (Enter ⏎)</button>
+                </div>
+                <div class="palette-suggestions">
+                  <span class="palette-sug-label">Sugestões rápidas:</span>
+                  <button type="button" class="palette-chip" data-tag="strong">&lt;strong&gt;</button>
+                  <button type="button" class="palette-chip" data-tag="em">&lt;em&gt;</button>
+                  <button type="button" class="palette-chip" data-tag="mark">&lt;mark&gt;</button>
+                  <button type="button" class="palette-chip" data-tag="a">&lt;a&gt;</button>
+                  <button type="button" class="palette-chip" data-tag="p">&lt;p&gt;</button>
+                  <button type="button" class="palette-chip" data-tag="h1">&lt;h1&gt;</button>
+                  <button type="button" class="palette-chip" data-tag="h2">&lt;h2&gt;</button>
+                  <button type="button" class="palette-chip" data-tag="span">&lt;span&gt;</button>
+                </div>
+              </div>
+            </div>
+
             <div class="line-numbers" id="line-numbers"></div>
             <div class="editor-surface">
               <div class="current-line-highlight" id="current-line-highlight"></div>

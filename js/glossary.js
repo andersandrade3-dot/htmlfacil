@@ -107,6 +107,35 @@ class GlossaryManager {
 └── Tag de Abertura (&lt;a&gt;)</div>
       </div>
 
+      <!-- Card de Atalhos Essenciais do VS Code -->
+      <div style="background: #111e2e; border: 1px solid #1f6feb; border-radius: 6px; padding: 12px 16px; margin-bottom: 16px;">
+        <div style="font-size: 12px; font-weight: bold; color: #58a6ff; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+          <span>⌨️ ATALHOS DE TECLADO ESSENCIAIS (PRODUTIVIDADE VS CODE):</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; font-size: 11.5px; color: #c9d1d9;">
+          <div>
+            <kbd class="kbd-key">Alt</kbd> + <kbd class="kbd-key">W</kbd>
+            <span style="color: #fff; font-weight: bold; margin-left: 4px;">Envolver com Tag</span>
+            <div style="color: #8b949e; font-size: 10.5px; margin-top: 2px;">Selecione uma palavra e envolva rapidamente com &lt;strong&gt;, &lt;em&gt;, &lt;mark&gt; ou &lt;a&gt;.</div>
+          </div>
+          <div>
+            <kbd class="kbd-key">Ctrl</kbd> + <kbd class="kbd-key">Espaço</kbd>
+            <span style="color: #fff; font-weight: bold; margin-left: 4px;">IntelliSense</span>
+            <div style="color: #8b949e; font-size: 10.5px; margin-top: 2px;">Abre a lista de imagens da pasta assets e autocompleta tags.</div>
+          </div>
+          <div>
+            <kbd class="kbd-key">Ctrl</kbd> + <kbd class="kbd-key">Enter</kbd>
+            <span style="color: #fff; font-weight: bold; margin-left: 4px;">Executar Código</span>
+            <div style="color: #8b949e; font-size: 10.5px; margin-top: 2px;">Testa e valida seu HTML imediatamente sem precisar clicar no botão.</div>
+          </div>
+          <div>
+            <kbd class="kbd-key">Tab</kbd> / <kbd class="kbd-key">Enter</kbd>
+            <span style="color: #fff; font-weight: bold; margin-left: 4px;">Indentação Automática</span>
+            <div style="color: #8b949e; font-size: 10.5px; margin-top: 2px;">Tab adiciona 2 espaços; Enter organiza filhos dentro de tags automaticamente.</div>
+          </div>
+        </div>
+      </div>
+
       <div class="glossary-grid">
         ${GLOSSARY_DATA.map(item => `
           <div class="glossary-card">

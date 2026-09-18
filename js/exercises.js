@@ -194,15 +194,15 @@ const EXERCISES = [
     id: 9,
     phase: 3,
     levelName: "Fase 3 — Formatação de Texto",
-    title: "9. Dando Importância: <strong>",
-    task: "Dentro do parágrafo, envolva a palavra 'programação' com a tag <code>&lt;strong&gt;</code> para deixá-la em negrito e indicar importância.",
+    title: "9. Dando Importância: <strong> (Atalho Alt + W)",
+    task: "Dentro do parágrafo, envolva a palavra 'programação' com a tag <code>&lt;strong&gt;</code>.<br><br>💡 <strong>Superpoder do VS Code:</strong> Selecione a palavra com o mouse (ou dê dois cliques nela) e aperte <kbd class=\"kbd-key\">Alt</kbd> + <kbd class=\"kbd-key\">W</kbd> para envolver com tag automaticamente!",
     whereDiagram: "<p>\n  Eu gosto muito de ← COLOQUE <strong>programação</strong> AQUI\n</p>",
     starterCode: "<!DOCTYPE html>\n<html>\n  <head>\n  </head>\n  <body>\n    <p>Eu gosto muito de programação web.</p>\n  </body>\n</html>",
     targetFile: "index.html",
     hints: [
       "A tag <strong> deixa o texto em negrito e avisa aos leitores de tela que essa palavra é importante.",
-      "Coloque <strong> antes da palavra e </strong> logo depois dela.",
-      "Não apague a tag <p> que está em volta.",
+      "Atalho Pro do VS Code: Selecione a palavra 'programação' e tecle Alt + W (ou clique no botão '⚡ Envolver Seleção'). Depois digite strong e dê Enter!",
+      "Você também pode digitar manualmente colocando <strong> antes da palavra e </strong> logo depois dela.",
       "Exemplo:\n<p>Eu gosto muito de <strong>programação</strong> web.</p>"
     ],
     verify: (code, dom, errors) => {
@@ -216,15 +216,15 @@ const EXERCISES = [
     id: 10,
     phase: 3,
     levelName: "Fase 3 — Formatação de Texto",
-    title: "10. Dando Ênfase: <em>",
-    task: "Use a tag <code>&lt;em&gt;</code> (ênfase) em volta da palavra 'fácil' no segundo parágrafo para deixá-la em itálico.",
+    title: "10. Dando Ênfase: <em> (Atalho Alt + W)",
+    task: "Use a tag <code>&lt;em&gt;</code> (ênfase) em volta da palavra 'fácil' no segundo parágrafo para deixá-la em itálico.<br><br>⚡ <strong>Pratique o atalho:</strong> Dê dois cliques na palavra 'fácil', aperte <kbd class=\"kbd-key\">Alt</kbd> + <kbd class=\"kbd-key\">W</kbd>, digite <code>em</code> e tecle Enter!",
     whereDiagram: "<p>\n  HTML é muito ← COLOQUE <em>fácil</em> AQUI\n</p>",
     starterCode: "<!DOCTYPE html>\n<html>\n  <head>\n  </head>\n  <body>\n    <p>Eu gosto de <strong>programação</strong>.</p>\n    <p>HTML é muito fácil de aprender.</p>\n  </body>\n</html>",
     targetFile: "index.html",
     hints: [
       "A tag <em> significa 'emphasis' e deixa o texto em itálico.",
+      "Pratique o atalho de desenvolvedor: selecione 'fácil' e aperte Alt + W, depois clique em <em> ou digite 'em'!",
       "Ela deve abrir antes da palavra e fechar logo após: <em>fácil</em>.",
-      "Mantenha ela dentro do parágrafo.",
       "Exemplo:\n<p>HTML é muito <em>fácil</em> de aprender.</p>"
     ],
     verify: (code, dom, errors) => {
@@ -239,14 +239,14 @@ const EXERCISES = [
     phase: 3,
     levelName: "Fase 3 — Formatação de Texto",
     title: "11. O Marca-Texto: <mark>",
-    task: "Use a tag <code>&lt;mark&gt;</code> para destacar a palavra 'importante' como se tivesse passado um marca-texto amarelo.",
+    task: "Use a tag <code>&lt;mark&gt;</code> para destacar a palavra 'importante' como se tivesse passado um marca-texto amarelo.<br><br>💡 Experimente selecionar a palavra e pressionar <kbd class=\"kbd-key\">Alt</kbd> + <kbd class=\"kbd-key\">W</kbd>!",
     whereDiagram: "<p>\n  Atenção: isto é ← COLOQUE <mark>importante</mark> AQUI\n</p>",
     starterCode: "<!DOCTYPE html>\n<html>\n  <head>\n  </head>\n  <body>\n    <p>Atenção: isto é importante para o teste.</p>\n  </body>\n</html>",
     targetFile: "index.html",
     hints: [
       "A tag <mark> simula visualmente uma caneta marca-texto amarela.",
-      "Abra com <mark> antes da palavra e feche com </mark>.",
-      "Veja o resultado mudar no simulador assim que executar!",
+      "Com o atalho Alt + W: selecione 'importante', aperte Alt + W, clique em <mark> e pronto!",
+      "Veja o resultado mudar no simulador assim que recarregar o navegador!",
       "Exemplo:\n<p>Atenção: isto é <mark>importante</mark> para o teste.</p>"
     ],
     verify: (code, dom, errors) => {
@@ -268,7 +268,7 @@ const EXERCISES = [
     hints: [
       "Aninhamento significa colocar uma tag dentro da outra.",
       "A regra de ouro é: a última tag que abre é a primeira que deve fechar!",
-      "Crie um <p>, coloque palavras com <strong></strong> e <em></em> dentro dele.",
+      "Você pode usar o atalho Alt + W nas palavras para não errar a ordem de fechamento das tags.",
       "Exemplo:\n<p>Hoje é um dia <strong>muito</strong> <em>especial</em>!</p>"
     ],
     verify: (code, dom, errors) => {
